@@ -1,4 +1,5 @@
 import {AppBar, Box, createTheme, CssBaseline, ThemeProvider, Toolbar, Typography} from "@mui/material";
+import {Outlet} from "react-router-dom";
 
 const theme = createTheme({
   typography: {
@@ -30,8 +31,8 @@ function App() {
     </AppBar>
     <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
       <Toolbar/>
-      <Box flexGrow={1}>
-
+      <Box id={"detail"} flexGrow={1}>
+        <Outlet/>
       </Box>
       <Box display={"flex"} flexDirection={"column"} alignItems={"center"} gap={1} justifyContent={"center"} paddingY={1}>
         <Typography variant={"caption"}>
