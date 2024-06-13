@@ -10,7 +10,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "outDir": "out"
+    "outDir": "out",
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }

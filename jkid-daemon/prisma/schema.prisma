@@ -10,11 +10,12 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./data.db"
 }
 
 model PendingUsers {
   studentId Int @id
+  name String
   username String @unique
   password String
   email String @unique

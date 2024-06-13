@@ -27,4 +27,4 @@ dist-ssr
 
 out
 
-data.db
+*.db*
