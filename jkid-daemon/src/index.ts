@@ -16,7 +16,9 @@ app.use(express.json());
 
 import registerRouter from "./register";
 import * as console from "node:console";
+import adminRouter from "./admin";
 app.use("/register", registerRouter);
+app.use("/admin", adminRouter);
 
 app.listen(14590, () => {
   console.log("App listening")
