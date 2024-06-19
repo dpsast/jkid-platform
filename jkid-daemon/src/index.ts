@@ -20,6 +20,9 @@ import adminRouter from "./admin";
 app.use("/register", registerRouter);
 app.use("/admin", adminRouter);
 
-app.listen(14590, () => {
-  console.log("App listening")
+const serverIp = process.env.SERVER_IP || "0.0.0.0";
+const serverPort = parseInt(process.env.SERVER_PORT || "14590");
+
+app.listen(serverPort, serverIp, () => {
+  console.log(`App listening on ${serverIp === "0.0.0.0" ? "*" : serverIp}:${serverPort}`);
 })
