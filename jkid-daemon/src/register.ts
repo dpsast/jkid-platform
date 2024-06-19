@@ -26,46 +26,50 @@ registerRouter.get("/continue", async (req, res) => {
     res.status(400).end();
   }
 
-  const data = <any> await fetch("https://git.tsinghua.edu.cn/oauth/token", {
-    method: "post",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      client_id: oauthAppId,
-      client_secret: oauthAppSecret,
-      code: req.query.code,
-      grant_type: "authorization_code",
-      redirect_uri: oauthRedirectUri
-    } as Record<string, string | readonly string[]>).toString(),
-  }).then(res => res.json());
+  try {
+    const data = <any>await fetch("https://git.tsinghua.edu.cn/oauth/token", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: oauthAppId,
+        client_secret: oauthAppSecret,
+        code: req.query.code,
+        grant_type: "authorization_code",
+        redirect_uri: oauthRedirectUri
+      } as Record<string, string | readonly string[]>).toString(),
+    }).then(res => res.json());
 
-  // console.log(data);
-  const access_token = data.access_token;
+    // console.log(data);
+    const access_token = data.access_token;
 
-  const userInfo = <any> await fetch("https://git.tsinghua.edu.cn/api/v4/user", {
-    headers: {
-      "Authorization": `Bearer ${access_token}`
+    const userInfo = <any>await fetch("https://git.tsinghua.edu.cn/api/v4/user", {
+      headers: {
+        "Authorization": `Bearer ${access_token}`
+      }
+    }).then(res => res.json());
+
+    if (!userInfo.name || !userInfo.email) {
+      res.status(502).json("Internal Error").end();
+      return;
     }
-  }).then(res => res.json());
 
-  if (!userInfo.name || !userInfo.email) {
-    res.status(502).json("Internal Error").end();
-    return;
+    const name = userInfo.name; // Real name
+    const username = userInfo.username;
+    const studentId = userInfo.identities[0].extern_uid; // Tsinghua University Student ID
+    const email = userInfo.email;
+    const payload = {name, username, studentId, email}
+
+    const token = jwt.sign(payload, <string>oauthAppSecret);
+    const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
+
+    res.redirect(new URL(`/register?${
+      new URLSearchParams({token, base64Payload}).toString()
+    }`, webUrl).href);
+  } catch (_err) {
+    res.status(502).end();
   }
-
-  const name = userInfo.name; // Real name
-  const username = userInfo.username;
-  const studentId = userInfo.identities[0].extern_uid; // Tsinghua University Student ID
-  const email = userInfo.email;
-  const payload = { name, username, studentId, email }
-
-  const token = jwt.sign(payload, <string> oauthAppSecret);
-  const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
-
-  res.redirect(new URL(`/register?${
-    new URLSearchParams({ token, base64Payload }).toString()
-  }`, webUrl).href);
 });
 
 const registerSubmitValidator = validator({
