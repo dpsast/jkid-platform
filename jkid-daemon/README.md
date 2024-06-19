@@ -2,7 +2,7 @@
 
 The backend for jkid-platform.
 
-## Before All Begins
+# Before All Begins
 
 jkid-daemon uses `npm`. Run
 ```shell
@@ -20,13 +20,15 @@ This step of initializing `prisma` is unavoidable so there's no way to pack ever
 
 The database file is located at `/path/to/project/jkid-daemon/prisma/data.db`.
 
-## Deployment
+# Deployment
 
-### Building
+## Building
 
 Simply execute `tsc` to build.
 
-### Configuration
+## Configuration
+
+### OAuth Application
 
 Create an OAuth Application on [Tsinghua Git](https://git.tsinghua.edu.cn/-/user_settings/applications). Grant the following scope(s):
 - `read_user`
@@ -51,6 +53,24 @@ GIT_OAUTH_APP_REDIRECT_URI="{redirect_uri}"
 
 > Hint: An OAuth application accepts multiple redirect URIs. To perform tests locally, you can also add a redirect URI `http://localhost:14590/register/continue` to the application and leave the line mentioned above blank. Then the server will use this default redirect URI.
 
+<details> <summary>If you are using other Git services</summary>
+
+Keep in mind that other Git services may not return the student ID ("学号") as Tsinghua Git does (unfortunately they even may not have the concept of "学号"!) So you may need to modify the source code and the prisma schema file. This limits the extensibility of this application. What a pity!
+
+</details>
+
+### Gitea
+
+Obtain an access token from an admin account. Then add the following line to the `.env` file:
+```properties
+GITEA_API_ENDPOINT="{url}"
+GITEA_ACCESS_TOKEN="{access_token}"
+```
+
+Check the port your Gitea service listens to, and complete the `{url}`, for example, `http://localhost:3000/api/v1/`. Note that the API endpoint should always end with `/api/v1/` (pay attention to the last character `/`).
+
+### Network
+
 Without explicitly configuring, the CORS policy of this daemon only accepts requests from the "source" `http://localhost:5173`, which is the address of Vite dev server. Add the following line to the `.env` file:
 ```properties
 WEB_URL="{url}"
@@ -68,7 +88,7 @@ The daemon service listens to port `14590` by default. To change it, add such a 
 SERVER_PORT={port}
 ```
 
-### Start the server
+## Start the server
 
 Finally, you can run
 ```shell
