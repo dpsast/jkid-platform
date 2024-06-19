@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
+    "daemon:dev": "tsc && npm start",
     "start": "node --env-file=.env out/index.js"
   },
   "author": "",
