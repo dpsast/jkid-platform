@@ -12,6 +12,7 @@ app.use(cors({
   origin: webUrl,
   credentials: true
 }));
+app.use(express.json());
 
 import registerRouter from "./register";
 import * as console from "node:console";

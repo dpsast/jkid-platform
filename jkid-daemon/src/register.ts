@@ -73,7 +73,9 @@ const registerSubmitValidator = validator({
   properties: {
     token: { type: "string" },
     password: { type: "string", maxLength: 64 }
-  }
+  },
+  additionalProperties: false,
+  required: ["token", "password"],
 });
 
 registerRouter.post("/submit", async (req, res) => {
@@ -86,10 +88,12 @@ registerRouter.post("/submit", async (req, res) => {
   try {
    const { name, username, studentId, email } = <any> jwt.verify(token, <string>oauthAppSecret);
    await prisma.pendingUsers.create({
-      data: {
-        studentId, name, username, email, password
-      }
+     data: {
+       studentId: parseInt(studentId),
+       name, username, email, password
+     }
    });
+   res.json({ status: "pending" });
   } catch (_err) {
     res.status(400).end();
     return;
