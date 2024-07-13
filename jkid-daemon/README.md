@@ -69,6 +69,10 @@ GITEA_ACCESS_TOKEN="{access_token}"
 
 Check the port your Gitea service listens to, and complete the `{url}`, for example, `http://localhost:3000/api/v1/`. Note that the API endpoint should always end with `/api/v1/` (pay attention to the last character `/`).
 
+### Auto Pass List
+
+The auto pass list is a list of student IDs that are allowed to pass the registration process without any manual review. The list is stored in a file named `auto-pass.txt` in the root directory of the project. The file should contain one student ID per line.
+
 ### Network
 
 Without explicitly configuring, the CORS policy of this daemon only accepts requests from the "source" `http://localhost:5173`, which is the address of Vite dev server. Add the following line to the `.env` file:

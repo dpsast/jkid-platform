@@ -3,9 +3,10 @@ import urlEncode from "urlencode";
 import * as process from "node:process";
 
 import jwt from "jsonwebtoken";
-import {webUrl, prisma} from "./index";
+import {webUrl, prisma, autoPassSet} from "./index";
 
 import {validator} from "@exodus/schemasafe";
+import {accept} from "./admin";
 
 const oauthAppId = process.env.GIT_OAUTH_APP_ID;
 const oauthAppSecret = process.env.GIT_OAUTH_APP_SECRET;
@@ -97,7 +98,16 @@ registerRouter.post("/submit", async (req, res) => {
        name, username, email, password
      }
    });
-   res.json({ status: "pending" });
+   if (autoPassSet.has(studentId)) {
+     const ok = await accept(parseInt(studentId), username, email, password);
+     if (ok) {
+       res.json({ status: "success" });
+     } else {
+       res.status(502).end();
+     }
+   } else {
+     res.json({status: "pending"});
+   }
   } catch (_err) {
     res.status(400).end();
     return;
