@@ -43,6 +43,7 @@ function Register() {
         <ValidatorTextField
           label={"确认密码"}
           type={"password"}
+          frequency={"onChange"}
           validator={input => input === password ? { isValid: true } : { isValid: false, hint: "两次输入的密码不一致" } }
           setValid={setConfirmed}
         />
