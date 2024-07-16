@@ -7,6 +7,9 @@ function Register() {
   const [searchParams, /* _setSearchParams */ ] = useSearchParams();
   const navigate = useNavigate();
 
+  const [department, setDepartment] = useState("");
+  const [reason, setReason] = useState("");
+
   const [password, setPassword] = useState("");
   const [passwordValid, setPasswordValid] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
@@ -28,6 +31,13 @@ function Register() {
         <TextField label={"学号"} value={studentId} InputProps={{ readOnly: true }}/>
         <TextField label={"用户名"} value={username} InputProps={{ readOnly: true }}/>
         <TextField label={"邮箱"} value={email} InputProps={{ readOnly: true }}/>
+
+        <Typography>
+          由于我们无法确认你是否为物理系 / 致理书院物理方向的同学，请你补充填写你的院系和注册理由。
+        </Typography>
+
+        <TextField label={"院系"} onBlur={e => setDepartment(e.target.value)}/>
+        <TextField label={"注册理由"} multiline rows={4} onBlur={e => setReason(e.target.value)}/>
 
         <Typography>
           请设置账户的密码，至少 8 个字符。请注意这是一个<b>临时</b>密码，在审核通过第一次登录时依然会要求你修改密码。<br/>
@@ -56,15 +66,12 @@ function Register() {
             },
             body: JSON.stringify({
               token: searchParams.get("token"),
-              password
+              password,
+              department,
+              reason
             })
-          }).then(res => res.json()).then(({ status }) => {
-            if (status === "pending") {
-              navigate("/submitted-pending");
-            }
-            if (status === "success") {
-              navigate("/submitted-success");
-            }
+          }).then(res => res.ok).then(ok => {
+            if (ok) navigate("/submitted-pending");
           })
         }}>提交</Button>
       </Box>
@@ -84,16 +91,23 @@ function SubmittedPending() {
   </Grid></Box>;
 }
 
-function SubmittedSuccess() {
+function AutoPass() {
+  const [searchParams] = useSearchParams();
+
+  const username = searchParams.get("username");
+  const tempPassword = searchParams.get("tempPassword");
+
   return <Box height={"100%"} display={"flex"} alignItems={"center"}><Grid container sx={{flexGrow: 1}}>
     <Grid xs={1} md={3}/>
     <Grid xs={10} md={6}>
       <Typography>感谢你的注册！你的学号位于我们维护的“自动通过名单”中，因此恭喜你已经拥有了饥渴 ID！</Typography>
-      <Typography>欢迎用注册时的用户名和临时密码登录我们的 <Link href={"https://gitea.jkparadise.space/"}>Gitea 平台</Link>！</Typography>
+      <Typography>你的用户名：<b>{username}</b>；你的临时密码：<b>{tempPassword}</b></Typography>
+      <Typography>请注意这是一个<b>临时</b>密码，在审核通过第一次登录时依然会要求你修改密码。</Typography>
+      <Typography>欢迎用以上凭据登录我们的 <Link href={"https://gitea.jkparadise.space/"}>Gitea 平台</Link>！</Typography>
     </Grid>
     <Grid xs={1} md={3}/>
   </Grid></Box>;
 }
 
 export default Register;
-export { SubmittedPending, SubmittedSuccess };
+export { SubmittedPending, AutoPass };

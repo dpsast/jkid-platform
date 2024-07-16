@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App, {Landing} from './App.tsx'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import Register, {SubmittedPending, SubmittedSuccess} from "./Register.tsx";
+import Register, {SubmittedPending, AutoPass} from "./Register.tsx";
 
 const router = createBrowserRouter([
   {
@@ -22,8 +22,8 @@ const router = createBrowserRouter([
         element: <SubmittedPending/>
       },
       {
-        path: "submitted-success",
-        element: <SubmittedSuccess/>
+        path: "auto-pass",
+        element: <AutoPass/>
       },
     ],
   },

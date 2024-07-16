@@ -16,8 +16,14 @@ async function main() {
     try {
       const response = await axios.get(`${apiBaseURL}/list`);
       console.log((response.data as any[]).map(
-        value => `${value.studentId} ${value.name} ${value.email}`
-      ).join('\n'));
+        value => [
+          `Name: ${value.name}`,
+          `Email: ${value.email}`,
+          `Student ID: ${value.studentId}`,
+          `Department: ${value.department}`,
+          `Reason: ${value.reason}`,
+        ].join('\n')
+      ).join('\n\n'));
     } catch (error) {
       console.error('Error fetching the list:', error);
     }

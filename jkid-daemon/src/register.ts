@@ -7,6 +7,7 @@ import {webUrl, prisma, autoPassSet} from "./index";
 
 import {validator} from "@exodus/schemasafe";
 import {accept} from "./admin";
+import {randomUUID} from "node:crypto";
 
 const oauthAppId = process.env.GIT_OAUTH_APP_ID;
 const oauthAppSecret = process.env.GIT_OAUTH_APP_SECRET;
@@ -60,6 +61,16 @@ registerRouter.get("/continue", async (req, res) => {
     const username = userInfo.username;
     const studentId = userInfo.identities[0].extern_uid; // Tsinghua University Student ID
     const email = userInfo.email;
+
+    if (autoPassSet.has(studentId)) {
+      const tempPassword = randomUUID();
+      await accept(username, email, tempPassword);
+      res.redirect(new URL(`/auto-pass?${
+        new URLSearchParams({username, tempPassword}).toString()
+      }`, webUrl).href);
+      return;
+    }
+
     const payload = {name, username, studentId, email}
 
     const token = jwt.sign(payload, <string>oauthAppSecret);
@@ -77,10 +88,12 @@ const registerSubmitValidator = validator({
   type: "object",
   properties: {
     token: { type: "string" },
-    password: { type: "string", maxLength: 64 }
+    password: { type: "string", maxLength: 64 },
+    department: { type: "string" },
+    reason: { type: "string" },
   },
   additionalProperties: false,
-  required: ["token", "password"],
+  required: ["token", "password", "department", "reason"],
 });
 
 registerRouter.post("/submit", async (req, res) => {
@@ -89,25 +102,16 @@ registerRouter.post("/submit", async (req, res) => {
     return;
   }
 
-  const { token, password } = req.body;
+  const { token, password, department, reason } = req.body;
   try {
    const { name, username, studentId, email } = <any> jwt.verify(token, <string>oauthAppSecret);
    await prisma.pendingUsers.create({
      data: {
        studentId: parseInt(studentId),
-       name, username, email, password
+       name, username, email, password, department, reason
      }
    });
-   if (autoPassSet.has(studentId)) {
-     const ok = await accept(parseInt(studentId), username, email, password);
-     if (ok) {
-       res.json({ status: "success" });
-     } else {
-       res.status(502).end();
-     }
-   } else {
-     res.json({status: "pending"});
-   }
+   res.status(201).end();
   } catch (_err) {
     res.status(400).end();
     return;

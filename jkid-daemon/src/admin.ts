@@ -43,16 +43,22 @@ adminRouter.get("/accept", async (req, res) => {
     return;
   }
 
-  await accept(permitted.studentId, permitted.username, permitted.email, permitted.password).then(ok => {
-    if (ok) {
-      res.json(permitted);
-    } else {
-      res.status(502).end();
-    }
-  });
+  await accept(permitted.username, permitted.email, permitted.password)
+    .then(res => res.ok)
+    .then(async ok => {
+      if (ok) {
+        await prisma.pendingUsers.delete({
+          where: { studentId: permitted.studentId }
+        });
+        res.json(permitted);
+      } else {
+        res.status(502).end();
+      }
+      return ok;
+    });
 });
 
-export async function accept(studentId: number, username: string, email: string, password: string) {
+export async function accept(username: string, email: string, password: string) {
   return fetch(new URL(`admin/users`, giteaApiEndpoint), {
     method: "post",
     headers: {
@@ -66,14 +72,7 @@ export async function accept(studentId: number, username: string, email: string,
       // "send_notify": true,
       "username": username,
     }),
-  }).then(res => res.ok).then(async ok => {
-    if (ok) {
-      await prisma.pendingUsers.delete({
-        where: { studentId }
-      });
-    }
-    return ok;
-  });
+  })
 }
 
 adminRouter.get("/reject", async (req, res) => {

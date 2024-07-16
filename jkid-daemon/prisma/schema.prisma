@@ -19,4 +19,6 @@ model PendingUsers {
   username String @unique
   password String
   email String @unique
+  department String
+  reason String
 }
