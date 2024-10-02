@@ -26,7 +26,7 @@ const serverPort = parseInt(process.env.SERVER_PORT || "14590");
 export const autoPassSet: Set<string> = fs.existsSync('auto-pass.txt') ? new Set(
   fs.readFileSync('auto-pass.txt', 'utf8')
     .split('\n')
-    .filter(value => value !== '')
+    .filter(value => value !== '' && !value.startsWith('#'))
 ) : new Set();
 
 app.listen(serverPort, serverIp, () => {
