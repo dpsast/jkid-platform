@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "daemon:dev": "tsc && npm start",
-    "start": "node --env-file=.env out/index.js"
+    "start": "node out/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +13,7 @@
     "@exodus/schemasafe": "^1.3.0",
     "@prisma/client": "^5.16.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "urlencode": "^2.0.0"
