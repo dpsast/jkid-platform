@@ -44,7 +44,7 @@ Replace `{app_id}` and `{app_secret}` with what you get in the previous step.
 
 Also, you need to specify a redirect URI in your App configuration. It should look like:
 ```
-http(s)://{the domain of id service}/register/continue
+http(s)://{the domain of id service}/api/register/continue
 ```
 Add such a line to the `.env` file:
 ```properties
@@ -74,13 +74,6 @@ Check the port your Gitea service listens to, and complete the `{url}`, for exam
 The auto pass list is a list of student IDs that are allowed to pass the registration process without any manual review. The list is stored in a file named `auto-pass.txt` in the root directory of the project. The file should contain one student ID per line.
 
 ### Network
-
-Without explicitly configuring, the CORS policy of this daemon only accepts requests from the "source" `http://localhost:5173`, which is the address of Vite dev server. Add the following line to the `.env` file:
-```properties
-WEB_URL="{url}"
-```
-
-Replace `{url}` with the real URL of jkid-web, for example, `https://id.jkparadise.space`.
 
 If your server has multiple IPs, then you can specify an IP for the server to bind by adding such a line:
 ```properties

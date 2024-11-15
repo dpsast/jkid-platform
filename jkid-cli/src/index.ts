@@ -9,7 +9,7 @@ const optionDefinitions = [
 
 const options = commandLineArgs(optionDefinitions);
 
-const apiBaseURL = `http://localhost:${process.env.BACKEND_PORT || '14590'}/admin`;
+const apiBaseURL = `http://localhost:${process.env.BACKEND_PORT || '14590'}/api/admin`;
 
 async function main() {
   if (options.list) {

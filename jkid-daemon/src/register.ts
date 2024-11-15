@@ -3,7 +3,7 @@ import urlEncode from "urlencode";
 import * as process from "node:process";
 
 import jwt from "jsonwebtoken";
-import {webUrl, prisma, autoPassSet} from "./index";
+import {prisma, autoPassSet} from "./index";
 
 import {validator} from "@exodus/schemasafe";
 import {accept} from "./admin";
@@ -11,7 +11,7 @@ import {randomUUID} from "node:crypto";
 
 const oauthAppId = process.env.GIT_OAUTH_APP_ID;
 const oauthAppSecret = process.env.GIT_OAUTH_APP_SECRET;
-const oauthRedirectUri = process.env.GIT_OAUTH_APP_REDIRECT_URI || "http://localhost:14590/register/continue"
+const oauthRedirectUri = process.env.GIT_OAUTH_APP_REDIRECT_URI || "http://localhost:14590/api/register/continue"
 
 const registerRouter = express.Router();
 
@@ -65,9 +65,7 @@ registerRouter.get("/continue", async (req, res) => {
     if (autoPassSet.has(studentId)) {
       const tempPassword = randomUUID();
       await accept(username, email, tempPassword);
-      res.redirect(new URL(`/auto-pass?${
-        new URLSearchParams({username, tempPassword}).toString()
-      }`, webUrl).href);
+      res.redirect(`/auto-pass?${new URLSearchParams({username, tempPassword}).toString()}`);
       return;
     }
 
@@ -76,9 +74,7 @@ registerRouter.get("/continue", async (req, res) => {
     const token = jwt.sign(payload, <string>oauthAppSecret);
     const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
 
-    res.redirect(new URL(`/register?${
-      new URLSearchParams({token, base64Payload}).toString()
-    }`, webUrl).href);
+    res.redirect(`/register?${new URLSearchParams({token, base64Payload}).toString()}`);
   } catch (_err) {
     res.status(502).end();
   }

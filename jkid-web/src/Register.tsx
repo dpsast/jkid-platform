@@ -59,7 +59,7 @@ function Register() {
         />
 
         <Button variant={"outlined"} size={"large"} disabled={!(passwordValid && confirmed)} onClick={() => {
-          fetch(new URL("/register/submit", import.meta.env.VITE_BACKEND_ADDRESS), {
+          fetch("/api/register/submit", {
             method: "post",
             headers: {
               "Content-Type": "application/json",

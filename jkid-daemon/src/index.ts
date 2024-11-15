@@ -1,24 +1,31 @@
-import { PrismaClient } from '@prisma/client';
-export const prisma = new PrismaClient();
-
+import {PrismaClient} from '@prisma/client';
 import process from "node:process";
-export const webUrl = process.env.WEB_URL || "http://localhost:5173";
-
 import express from "express";
-import cors from "cors";
 import fs from "node:fs";
-
-const app = express();
-app.use(cors({
-  origin: webUrl,
-  credentials: true
-}));
-app.use(express.json());
-
 import registerRouter from "./register";
 import adminRouter from "./admin";
-app.use("/register", registerRouter);
-app.use("/admin", adminRouter);
+import path from "node:path";
+
+export const prisma = new PrismaClient();
+
+const app = express();
+app.use(express.json());
+
+const staticPath = path.resolve('..', 'jkid-web', 'dist');
+if (!fs.existsSync(staticPath)) {
+  console.log('Static page not found. Please run `npm run build` in jkid-web first.');
+  process.exit(1);
+}
+app.use(express.static(staticPath));
+
+const apiRouter = express.Router();
+apiRouter.use("/register", registerRouter);
+apiRouter.use("/admin", adminRouter);
+app.use("/api", apiRouter);
+
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(staticPath, 'index.html'));
+});
 
 const serverIp = process.env.SERVER_IP || "0.0.0.0";
 const serverPort = parseInt(process.env.SERVER_PORT || "14590");
