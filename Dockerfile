@@ -33,4 +33,4 @@ RUN npm run build
 WORKDIR /app
 
 # Command to run all services
-CMD ["sh", "-c", "cd jkid-daemon; if [ ! -e ./prisma/data.db ]; then npx prisma generate; npx prisma db push; fi; npm run start"]
+CMD ["sh", "-c", "cd jkid-daemon; npx prisma generate; if [ ! -e ./prisma/data.db ]; then npx prisma db push; fi; npm run start"]
