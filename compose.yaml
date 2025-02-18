@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  jkid-platform:
+    image:
+    volumes:
+      - ./data/auto-pass.txt:/app/jkid-daemon/auto-pass.txt
+      - ./data/.env:/app/jkid-daemon/.env
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
