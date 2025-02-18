@@ -10,11 +10,13 @@ WORKDIR /app/jkid-cli
 RUN npm install
 
 # Copy jkid-daemon files and install dependencies
+WORKDIR /app
 COPY jkid-daemon ./jkid-daemon
 WORKDIR /app/jkid-daemon
 RUN npm install
 
 # Copy jkid-web files and install dependencies
+WORKDIR /app
 COPY jkid-web ./jkid-web
 WORKDIR /app/jkid-web
 RUN npm install
