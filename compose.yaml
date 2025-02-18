@@ -6,6 +6,7 @@ services:
     volumes:
       - ./data/auto-pass.txt:/app/jkid-daemon/auto-pass.txt
       - ./data/.env:/app/jkid-daemon/.env
+      - ./data/prisma:/app/jkid-daemon/prisma
     ports:
       - "3000:3000"
     environment:
