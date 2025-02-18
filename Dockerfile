@@ -1,6 +1,9 @@
 # Base image for Node.js
 FROM node:18-alpine
 
+# install bash
+apk install bash
+
 # Set working directory
 WORKDIR /app
 
@@ -14,6 +17,7 @@ WORKDIR /app
 COPY jkid-daemon ./jkid-daemon
 WORKDIR /app/jkid-daemon
 RUN npm install
+RUN npx tsc
 
 # Copy jkid-web files and install dependencies
 WORKDIR /app
