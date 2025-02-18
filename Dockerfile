@@ -2,7 +2,10 @@
 FROM node:18-alpine
 
 # install requirements
-RUN apk add bash libssl3 zlib libgcc
+RUN apk add bash && \
+    apk add openssl && \
+    apk add zlib && \
+    apk add libgcc
 
 # Set working directory
 WORKDIR /app
