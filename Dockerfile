@@ -2,7 +2,7 @@
 FROM node:18-alpine
 
 # install bash
-apk add bash
+RUN apk add bash
 
 # Set working directory
 WORKDIR /app
