@@ -1,8 +1,8 @@
 # Base image for Node.js
 FROM node:18-alpine
 
-# install bash
-RUN apk add bash
+# install requirements
+RUN apk add bash libssl3 zlib libgcc
 
 # Set working directory
 WORKDIR /app
