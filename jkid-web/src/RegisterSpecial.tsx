@@ -7,7 +7,7 @@ function RegisterSpecial() {
       <Box textAlign={"center"}>
         <Typography variant={"h4"}>其他人员注册</Typography>
       </Box>
-      <Typography>请发送邮件至 <Link href={"mailto:jkp@jkparadise.space"}>jkp@jkparadise.space</Link> 请求人工创建账号。</Typography>
+      <Typography>请发送邮件至 <Link href={"mailto:help@dpsast.org"}>help@dpsast.org</Link> 请求人工创建账号。</Typography>
       <Typography>邮件模板如下：</Typography>
       <Paper sx={{margin: 1}}>
         <Box padding={2}>
