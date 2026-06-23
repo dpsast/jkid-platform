@@ -1,0 +1,12 @@
+.git
+.github
+node_modules
+**/node_modules
+**/dist
+**/*.db
+packages/daemon/config.json
+packages/daemon/autopass.txt
+.env
+.env.*
+npm-debug.log*
+pnpm-debug.log*

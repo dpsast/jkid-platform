@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server';
 
-import config from '../config.json';
+import config from './config';
 import app from './http';
 
 serve({

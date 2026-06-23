@@ -2,7 +2,7 @@ import { initTRPC, TRPCError } from '@trpc/server';
 import { eq } from 'drizzle-orm';
 import z from 'zod';
 
-import config from '../../config.json';
+import config from '../config';
 import { db } from '../db';
 import { pendingUsers } from '../db/schema';
 import { createAccount } from '../gitea';

@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { getOauthAccessToken, getUserInfo } from 'thugit-oauth';
 
-import config from '../../config.json';
 import autoPassSet from '../autopass';
+import config from '../config';
 import { createAccount } from '../gitea';
 import { requestStorage } from '../storage';
 
