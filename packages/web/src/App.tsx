@@ -29,7 +29,10 @@ function App() {
       </AppBar>
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Toolbar />
-        <Box id="detail" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
+        <Box
+          id="detail"
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1, paddingY: 4 }}
+        >
           <Box
             sx={{
               height: '100%',
