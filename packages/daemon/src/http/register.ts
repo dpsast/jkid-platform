@@ -36,8 +36,9 @@ register.get('/callback', async (c) => {
 
     const user = await giteaGetUser(info.username);
     if (user) {
-      // TODO: Add reset password support for existing users
-      return c.text('User already exists, please log in instead', 400);
+      const requestId = randomUUID();
+      requestStorage.set(requestId, info);
+      return c.redirect(`/password-reset?${new URLSearchParams({ requestId, username: info.username }).toString()}`);
     }
 
     if (autoPassSet.has(info.studentId)) {

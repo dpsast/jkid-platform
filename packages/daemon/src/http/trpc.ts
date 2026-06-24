@@ -5,7 +5,7 @@ import z from 'zod';
 import config from '../config';
 import { db } from '../db';
 import { pendingUsers } from '../db/schema';
-import { giteaCreateUser } from '../gitea';
+import { giteaChangePassword, giteaCreateUser } from '../gitea';
 import { requestStorage } from '../storage';
 
 const t = initTRPC.create();
@@ -41,6 +41,24 @@ export const jkidRouter = t.router({
         requestStorage.delete(input.requestId);
       }),
   },
+  resetPassword: t.procedure
+    .input(
+      z.object({
+        requestId: z.uuid(),
+        newPassword: z.string().max(64),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const userInfo = requestStorage.get(input.requestId);
+      if (!userInfo) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Invalid request ID',
+        });
+      }
+      await giteaChangePassword(userInfo.username, input.newPassword);
+      requestStorage.delete(input.requestId);
+    }),
   admin: {
     listPendingUsers: t.procedure
       .input(

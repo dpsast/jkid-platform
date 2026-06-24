@@ -11,10 +11,11 @@ function Landing() {
         ），请先注册饥渴 ID。
       </Typography>
       <Typography>
-        清华大学在读学生请点击下面的“在校学生注册”进入注册流程。我们将会先将你重定向到 Tsinghua
+        清华大学在读学生请点击下面的“在校学生注册 / 重置密码”进入注册流程。我们将会先将你重定向到 Tsinghua
         Git，请在那里先登录，登录完毕后，你将回到注册页面。我们需要获取你的<b>真实姓名、学号、学生邮箱</b>
         以确认你的身份。除此之外，不会读取任何其他信息。
       </Typography>
+      <Typography>如果你已经注册了饥渴 ID，但忘记了密码，也可以点击下面的按钮进入重置密码流程。</Typography>
       <Typography>
         原则上，我们只允许清华大学物理系与致理书院物理方向的同学注册，记录在册的新生会自动通过审核。如果审核没有自动通过，亦或是其他院系的同学有注册意愿，请填写你的院系和注册理由。
       </Typography>
@@ -23,7 +24,7 @@ function Landing() {
         <Link href={'/register-special'}>其他人员注册</Link>。
       </Typography>
       <Button size={'large'} variant={'contained'} sx={{ alignSelf: 'center' }} href={'/api/register/fire'}>
-        在校学生注册
+        在校学生注册 / 重置密码
       </Button>
     </>
   );

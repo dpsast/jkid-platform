@@ -75,8 +75,6 @@ function Register() {
         size={'large'}
         disabled={!(passwordValid && confirmed)}
         onClick={async () => {
-          const base64Payload = searchParams.get('base64Payload');
-          if (!base64Payload) return;
           try {
             await trpc.register.submit.mutate({ requestId, password, department, reason });
             navigate('/submitted-pending');

@@ -6,6 +6,7 @@ import App from './App';
 import Admin from './pages/Admin';
 import AutoPass from './pages/AutoPass';
 import Landing from './pages/Landing';
+import PasswordReset from './pages/PasswordReset';
 import Register from './pages/Register';
 import RegisterSpecial from './pages/RegisterSpecial';
 import SubmittedPending from './pages/SubmittedPending';
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/register-special" element={<RegisterSpecial />} />
           <Route path="/submitted-pending" element={<SubmittedPending />} />
           <Route path="/auto-pass" element={<AutoPass />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
           <Route path="/admin" element={<Admin />} />
         </Route>
       </Routes>

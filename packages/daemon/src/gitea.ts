@@ -31,3 +31,16 @@ export async function giteaCreateUser(params: {
     throw new Error(`Failed to create user: ${response.status} ${response.statusText} - ${errorText}`);
   }
 }
+
+export async function giteaChangePassword(username: string, newPassword: string) {
+  const response = await gitea.admin.adminEditUser(username, {
+    login_name: 'empty', // by default
+    source_id: 0, // by default
+    password: newPassword,
+    must_change_password: false,
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to change password: ${response.status} ${response.statusText} - ${errorText}`);
+  }
+}
