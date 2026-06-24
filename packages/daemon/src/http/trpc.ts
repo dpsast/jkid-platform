@@ -5,7 +5,7 @@ import z from 'zod';
 import config from '../config';
 import { db } from '../db';
 import { pendingUsers } from '../db/schema';
-import { createAccount } from '../gitea';
+import { giteaCreateUser } from '../gitea';
 import { requestStorage } from '../storage';
 
 const t = initTRPC.create();
@@ -69,7 +69,7 @@ export const jkidRouter = t.router({
         if (!user) {
           throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
         }
-        await createAccount({
+        await giteaCreateUser({
           username: user.username,
           password: user.password,
           email: user.email,

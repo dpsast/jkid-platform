@@ -3,7 +3,7 @@ import { getOauthAccessToken, getUserInfo } from 'thugit-oauth';
 
 import autoPassSet from '../autopass';
 import config from '../config';
-import { createAccount } from '../gitea';
+import { giteaCreateUser, giteaGetUser } from '../gitea';
 import { requestStorage } from '../storage';
 
 import { randomUUID } from 'node:crypto';
@@ -33,9 +33,16 @@ register.get('/callback', async (c) => {
       config.tsinghuaGit.oauthRedirectUri,
     );
     const info = await getUserInfo(accessToken);
+
+    const user = await giteaGetUser(info.username);
+    if (user) {
+      // TODO: Add reset password support for existing users
+      return c.text('User already exists, please log in instead', 400);
+    }
+
     if (autoPassSet.has(info.studentId)) {
       const tempPassword = randomUUID();
-      await createAccount({
+      await giteaCreateUser({
         username: info.username,
         password: tempPassword,
         email: info.email,

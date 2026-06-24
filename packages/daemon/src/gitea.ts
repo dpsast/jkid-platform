@@ -1,27 +1,33 @@
+import { giteaApi, type User } from 'gitea-js';
+
 import config from './config';
 
-export async function createAccount(params: {
+const gitea = giteaApi(config.gitea.baseUrl, {
+  token: config.gitea.token, // generate one at https://gitea.example.com/user/settings/applications
+});
+
+export async function giteaGetUser(username: string): Promise<User | null> {
+  const response = await gitea.users.userGet(username);
+  if (!response.ok) {
+    return null;
+  }
+  return response.data;
+}
+
+export async function giteaCreateUser(params: {
   username: string;
   password: string;
   email: string;
   mustChangePassword: boolean;
 }) {
-  const response = await fetch(new URL(`admin/users`, config.gitea.baseUrl), {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `token ${config.gitea.token}`,
-    },
-    body: JSON.stringify({
-      email: params.email,
-      must_change_password: params.mustChangePassword,
-      password: params.password,
-      // send_notify: true,
-      username: params.username,
-    }),
+  const response = await gitea.admin.adminCreateUser({
+    username: params.username,
+    password: params.password,
+    email: params.email,
+    must_change_password: params.mustChangePassword,
   });
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`Failed to create account: ${response.status} ${response.statusText} - ${errorText}`);
+    throw new Error(`Failed to create user: ${response.status} ${response.statusText} - ${errorText}`);
   }
 }
