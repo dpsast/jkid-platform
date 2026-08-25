@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getOauthAccessToken, getUserInfo } from 'thugit-oauth';
+import { getOauthAccessToken, getUserInfoByToken } from 'thugit-oauth';
 
 import autoPassSet from '../autopass';
 import config from '../config';
@@ -26,13 +26,13 @@ register.get('/callback', async (c) => {
     if (!authorizationCode) {
       return c.text('Missing code parameter', 400);
     }
-    const accessToken = await getOauthAccessToken(
-      config.tsinghuaGit.oauthAppId,
-      config.tsinghuaGit.oauthAppSecret,
-      authorizationCode,
-      config.tsinghuaGit.oauthRedirectUri,
-    );
-    const info = await getUserInfo(accessToken);
+    const accessToken = await getOauthAccessToken({
+      oauthAppId: config.tsinghuaGit.oauthAppId,
+      oauthAppSecret: config.tsinghuaGit.oauthAppSecret,
+      authorizationCode: authorizationCode,
+      redirectUri: config.tsinghuaGit.oauthRedirectUri,
+    });
+    const info = await getUserInfoByToken(accessToken);
 
     const user = await giteaGetUser(info.username);
     if (user) {
