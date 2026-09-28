@@ -34,7 +34,7 @@ function PasswordReset() {
       />
       {resetSuccess ? (
         <Alert severity={'success'}>
-          密码重置成功！请回到 <Link href="https://git.dpsast.org">Gitea 平台</Link> 登录。
+          密码重置成功！请回到 <Link href="https://id.dpsast.org">Zitadel 平台</Link> 登录。
         </Alert>
       ) : resetError ? (
         <Alert severity={'error'}>密码重置失败：{resetError}</Alert>

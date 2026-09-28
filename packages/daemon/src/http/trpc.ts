@@ -5,7 +5,7 @@ import z from 'zod';
 import config from '../config';
 import { db } from '../db';
 import { pendingUsers } from '../db/schema';
-import { giteaChangePassword, giteaCreateUser } from '../gitea';
+import { zitadelChangePassword, zitadelCreateUser } from '../zitadel';
 import { requestStorage } from '../storage';
 
 const t = initTRPC.create();
@@ -56,7 +56,7 @@ export const jkidRouter = t.router({
           message: 'Invalid request ID',
         });
       }
-      await giteaChangePassword(userInfo.username, input.newPassword);
+      await zitadelChangePassword(userInfo.username, input.newPassword);
       requestStorage.delete(input.requestId);
     }),
   admin: {
@@ -87,10 +87,11 @@ export const jkidRouter = t.router({
         if (!user) {
           throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
         }
-        await giteaCreateUser({
+        await zitadelCreateUser({
           username: user.username,
           password: user.password,
           email: user.email,
+          realName: user.realName,
           mustChangePassword: false,
         });
         await db.delete(pendingUsers).where(eq(pendingUsers.studentId, input.studentId));

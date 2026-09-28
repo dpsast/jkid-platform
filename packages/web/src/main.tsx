@@ -11,10 +11,12 @@ import Register from './pages/Register';
 import RegisterSpecial from './pages/RegisterSpecial';
 import SubmittedPending from './pages/SubmittedPending';
 
+const basePath = new URL('.', document.baseURI).pathname.replace(/\/$/, '');
+
 // biome-ignore lint/style/noNonNullAssertion: The root element is guaranteed to exist in the HTML
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basePath}>
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Landing />} />

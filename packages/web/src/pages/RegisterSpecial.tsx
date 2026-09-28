@@ -13,7 +13,7 @@ function RegisterSpecial() {
       <Paper sx={{ margin: 1 }}>
         <Box sx={{ padding: 2 }}>
           <Typography>
-            Subject：<b>科协 Gitea 账户注册申请</b>
+            Subject：<b>科协 Zitadel 账户注册申请</b>
           </Typography>
         </Box>
         <Divider />
@@ -26,7 +26,7 @@ function RegisterSpecial() {
         </Box>
       </Paper>
       <Typography>
-        我们将会把您发送邮件时所用的邮箱作为 Gitea 账号的邮箱。审核通过后，我们会进行回复，请注意查收邮件。
+        我们将会把您发送邮件时所用的邮箱作为 Zitadel 账号的邮箱。审核通过后，我们会进行回复，请注意查收邮件。
       </Typography>
     </>
   );

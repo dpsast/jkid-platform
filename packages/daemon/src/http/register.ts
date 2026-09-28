@@ -3,7 +3,7 @@ import { getOauthAccessToken, getUserInfoByToken } from 'thugit-oauth';
 
 import autoPassSet from '../autopass';
 import config from '../config';
-import { giteaCreateUser, giteaGetUser } from '../gitea';
+import { zitadelCreateUser, zitadelGetUser } from '../zitadel';
 import { requestStorage } from '../storage';
 
 import { randomUUID } from 'node:crypto';
@@ -34,27 +34,28 @@ register.get('/callback', async (c) => {
     });
     const info = await getUserInfoByToken(accessToken);
 
-    const user = await giteaGetUser(info.username);
+    const user = await zitadelGetUser(info.username);
     if (user) {
       const requestId = randomUUID();
       requestStorage.set(requestId, info);
-      return c.redirect(`/password-reset?${new URLSearchParams({ requestId, username: info.username }).toString()}`);
+      return c.redirect(`${config.basePath}/password-reset?${new URLSearchParams({ requestId, username: info.username }).toString()}`);
     }
 
     if (autoPassSet.has(info.studentId)) {
       const tempPassword = randomUUID();
-      await giteaCreateUser({
+      await zitadelCreateUser({
         username: info.username,
         password: tempPassword,
         email: info.email,
+        realName: info.realName,
         mustChangePassword: true,
       });
-      return c.redirect(`/auto-pass?${new URLSearchParams({ username: info.username, tempPassword }).toString()}`);
+      return c.redirect(`${config.basePath}/auto-pass?${new URLSearchParams({ username: info.username, tempPassword }).toString()}`);
     } else {
       const requestId = randomUUID();
       const base64Payload = Buffer.from(JSON.stringify(info)).toString('base64');
       requestStorage.set(requestId, info);
-      return c.redirect(`/register?${new URLSearchParams({ requestId, base64Payload }).toString()}`);
+      return c.redirect(`${config.basePath}/register?${new URLSearchParams({ requestId, base64Payload }).toString()}`);
     }
   } catch (error) {
     console.error('Error during OAuth callback:', error);

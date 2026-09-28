@@ -21,9 +21,9 @@ function Landing() {
       </Typography>
       <Typography>
         如果你不再拥有清华大学电子身份（例如，已经从清华大学毕业），不用担心！请发送邮件联系我们，详见
-        <Link href={'/register-special'}>其他人员注册</Link>。
+          <Link href={'register-special'}>其他人员注册</Link>。
       </Typography>
-      <Button size={'large'} variant={'contained'} sx={{ alignSelf: 'center' }} href={'/api/register/fire'}>
+      <Button size={'large'} variant={'contained'} sx={{ alignSelf: 'center' }} href={'api/register/fire'}>
         在校学生注册 / 重置密码
       </Button>
     </>

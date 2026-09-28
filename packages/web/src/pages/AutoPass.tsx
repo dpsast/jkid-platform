@@ -17,7 +17,7 @@ function AutoPass() {
         请注意这是一个<b>临时</b>密码，在审核通过第一次登录时依然会要求你修改密码。
       </Typography>
       <Typography>
-        欢迎用以上凭据登录我们的 <Link href={'https://git.dpsast.org/user/login'}>Gitea 平台</Link>！
+        欢迎用以上凭据登录我们的 <Link href={'https://id.dpsast.org'}>Zitadel 平台</Link>！
       </Typography>
     </>
   );

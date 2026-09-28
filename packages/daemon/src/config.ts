@@ -6,13 +6,16 @@ export interface AppConfig {
   http: {
     port: number;
   };
+  basePath: string;
+  publicBaseUrl: string;
   tsinghuaGit: {
     oauthAppId: string;
     oauthAppSecret: string;
     oauthRedirectUri: string;
   };
-  gitea: {
+  zitadel: {
     baseUrl: string;
+    organizationId: string;
     token: string;
   };
   adminToken: string;
@@ -23,13 +26,16 @@ const defaultConfig: AppConfig = {
   http: {
     port: 8000,
   },
+  basePath: '',
+  publicBaseUrl: 'http://localhost:8000',
   tsinghuaGit: {
     oauthAppId: '',
     oauthAppSecret: '',
-    oauthRedirectUri: 'http://localhost:8000/api/register/callback',
+    oauthRedirectUri: '',
   },
-  gitea: {
-    baseUrl: 'http://localhost:3000/api/v1/',
+  zitadel: {
+    baseUrl: '',
+    organizationId: '',
     token: '',
   },
   adminToken: '',
@@ -67,12 +73,18 @@ function envNumber(name: string, fallback: number) {
 }
 
 const localConfig = readLocalConfig();
+const basePath = (process.env.BASE_PATH ?? localConfig.basePath ?? defaultConfig.basePath).replace(/\/$/, '');
+const publicBaseUrl = (process.env.PUBLIC_BASE_URL ?? localConfig.publicBaseUrl ?? defaultConfig.publicBaseUrl).replace(
+  /\/$/,
+);
 
 const config: AppConfig = {
   sqliteUrl: envString('SQLITE_URL', localConfig.sqliteUrl ?? defaultConfig.sqliteUrl),
   http: {
     port: envNumber('PORT', localConfig.http?.port ?? defaultConfig.http.port),
   },
+  basePath,
+  publicBaseUrl,
   tsinghuaGit: {
     oauthAppId: envString(
       'TSINGHUA_GIT_OAUTH_APP_ID',
@@ -82,14 +94,18 @@ const config: AppConfig = {
       'TSINGHUA_GIT_OAUTH_APP_SECRET',
       localConfig.tsinghuaGit?.oauthAppSecret ?? defaultConfig.tsinghuaGit.oauthAppSecret,
     ),
-    oauthRedirectUri: envString(
-      'TSINGHUA_GIT_OAUTH_REDIRECT_URI',
-      localConfig.tsinghuaGit?.oauthRedirectUri ?? defaultConfig.tsinghuaGit.oauthRedirectUri,
-    ),
+    oauthRedirectUri:
+      process.env.TSINGHUA_GIT_OAUTH_REDIRECT_URI ??
+      localConfig.tsinghuaGit?.oauthRedirectUri ??
+      `${publicBaseUrl}/api/register/callback`,
   },
-  gitea: {
-    baseUrl: envString('GITEA_BASE_URL', localConfig.gitea?.baseUrl ?? defaultConfig.gitea.baseUrl),
-    token: envString('GITEA_TOKEN', localConfig.gitea?.token ?? defaultConfig.gitea.token),
+  zitadel: {
+    baseUrl: envString('ZITADEL_URL', localConfig.zitadel?.baseUrl ?? defaultConfig.zitadel.baseUrl),
+    organizationId: envString(
+      'ZITADEL_ORGANIZATION_ID',
+      localConfig.zitadel?.organizationId ?? defaultConfig.zitadel.organizationId,
+    ),
+    token: envString('ZITADEL_TOKEN', localConfig.zitadel?.token ?? defaultConfig.zitadel.token),
   },
   adminToken: envString('ADMIN_TOKEN', localConfig.adminToken ?? defaultConfig.adminToken),
 };
