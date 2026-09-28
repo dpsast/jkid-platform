@@ -45,6 +45,10 @@ async function request<T>(path: string, init: RequestInit): Promise<T> {
     headers: {
       Authorization: `Bearer ${config.zitadel.token}`,
       'Content-Type': 'application/json',
+      Host: config.zitadel.host,
+      'X-Forwarded-Host': config.zitadel.host,
+      'X-Forwarded-Proto': 'https',
+      Forwarded: `proto=https;host=${config.zitadel.host}`,
       ...init.headers,
     },
   });
