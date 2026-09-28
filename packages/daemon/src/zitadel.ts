@@ -92,8 +92,8 @@ export async function zitadelCreateUser(params: {
     method: 'POST',
     body: JSON.stringify({
       organizationId: config.zitadel.organizationId,
+      username: params.username,
       human: {
-        username: params.username,
         profile,
         email: { email: params.email, isVerified: true },
         password: { password: params.password, changeRequired: params.mustChangePassword },
