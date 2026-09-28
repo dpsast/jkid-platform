@@ -15,7 +15,6 @@ export interface AppConfig {
   };
   zitadel: {
     baseUrl: string;
-    host: string;
     organizationId: string;
     token: string;
   };
@@ -36,7 +35,6 @@ const defaultConfig: AppConfig = {
   },
   zitadel: {
     baseUrl: '',
-    host: '',
     organizationId: '',
     token: '',
   },
@@ -104,7 +102,6 @@ const config: AppConfig = {
   },
   zitadel: {
     baseUrl: envString('ZITADEL_URL', localConfig.zitadel?.baseUrl ?? defaultConfig.zitadel.baseUrl),
-    host: envString('ZITADEL_HOST', localConfig.zitadel?.host ?? defaultConfig.zitadel.host),
     organizationId: envString(
       'ZITADEL_ORGANIZATION_ID',
       localConfig.zitadel?.organizationId ?? defaultConfig.zitadel.organizationId,
