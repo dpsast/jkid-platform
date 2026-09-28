@@ -87,7 +87,10 @@ export async function zitadelCreateUser(params: {
   realName: string;
   mustChangePassword: boolean;
 }) {
-  const profile = splitRealName(params.realName);
+  const profile = {
+    ...splitRealName(params.realName),
+    displayName: params.realName.trim(),
+  };
   await request('/v2/users/new', {
     method: 'POST',
     body: JSON.stringify({
