@@ -76,6 +76,7 @@ const localConfig = readLocalConfig();
 const basePath = (process.env.BASE_PATH ?? localConfig.basePath ?? defaultConfig.basePath).replace(/\/$/, '');
 const publicBaseUrl = (process.env.PUBLIC_BASE_URL ?? localConfig.publicBaseUrl ?? defaultConfig.publicBaseUrl).replace(
   /\/$/,
+  '',
 );
 
 const config: AppConfig = {
